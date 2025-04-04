@@ -178,16 +178,20 @@
         let players = [];
         let editIndex = -1;
 
+        // Open popup
         addBtn.addEventListener("click", () => {
             resetPopup();
             popup.classList.add("active");
         });
 
-        document.body.addEventListener("click", (e) => {
-            if (e.target === addBtn || popup.contains(e.target)) return;
-            popup.classList.remove("active");
+        // Close popup when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!popup.contains(e.target) && e.target !== addBtn) {
+                popup.classList.remove("active");
+            }
         });
 
+        // Handle extra fields based on role selection
         roleSelect.addEventListener("change", () => {
             extraFields.innerHTML = "";
             if (roleSelect.value === "Bowler") {
@@ -217,6 +221,7 @@
             }
         });
 
+        // Save player
         savePlayerBtn.addEventListener("click", () => {
             let playerName = document.getElementById("playerName").value;
             let role = roleSelect.value;
@@ -229,38 +234,21 @@
             }
 
             if (playerName && role) {
-                if (editIndex >= 0) {
-                    players[editIndex] = { name: playerName, role, details };
-                } else {
-                    players.push({ name: playerName, role, details });
-                }
+                players.push({ name: playerName, role, details });
                 renderPlayers();
                 popup.classList.remove("active");
             }
         });
 
+        // Render players
         function renderPlayers() {
-            playersList.innerHTML = players.map((p, i) => `
-                <div class="player-card">
-                    ${p.name} - ${p.role} (${p.details})
-                    <div class="icons">
-                        <svg onclick="editPlayer(${i})" viewBox="0 0 24 24"><path d="M14 5.4L5.9 13.5..."/></svg>
-                        <svg onclick="deletePlayer(${i})" viewBox="0 0 24 24"><path d="M9 3h6v2H9V3zM5 6h14l-1 14H6L5 6zm2 2v10h2V8H7z"/></svg>
-                    </div>
-                </div>`).join("");
+            playersList.innerHTML = players.map((p) => `<div class="player-card">${p.name} - ${p.role} (${p.details})</div>`).join("");
         }
 
-        function deletePlayer(i) {
-            players.splice(i, 1);
-            renderPlayers();
-        }
-
-        function editPlayer(i) {
-            let p = players[i];
-            document.getElementById("playerName").value = p.name;
-            roleSelect.value = p.role;
-            editIndex = i;
-            popup.classList.add("active");
+        function resetPopup() {
+            document.getElementById("playerName").value = "";
+            roleSelect.value = "";
+            extraFields.innerHTML = "";
         }
     </script>
 
