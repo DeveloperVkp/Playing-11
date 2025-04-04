@@ -162,6 +162,8 @@
             <option value="Wicketkeeper">Wicketkeeper</option>
         </select>
 
+        <div id="extraFields"></div>
+
         <button id="savePlayerBtn">Save</button>
     </div>
 
@@ -171,24 +173,57 @@
         const savePlayerBtn = document.getElementById("savePlayerBtn");
         const playersList = document.getElementById("playersList");
         const roleSelect = document.getElementById("role");
+        const extraFields = document.getElementById("extraFields");
 
         let players = [];
+        let editIndex = -1;
 
-        // ✅ Add Button Click - Open Popup
-        addBtn.addEventListener("click", () => {
+        function resetPopup() {
             document.getElementById("playerName").value = "";
-            roleSelect.value = "";
+            document.getElementById("role").value = "";
+            document.getElementById("extraFields").innerHTML = "";
+            editIndex = -1;
+        }
+
+        addBtn.addEventListener("click", () => {
+            resetPopup();
             popup.classList.add("active");
         });
 
-        // ✅ Close Popup on Background Click
-        document.addEventListener("click", (e) => {
-            if (!popup.contains(e.target) && e.target !== addBtn) {
-                popup.classList.remove("active");
+        document.body.addEventListener("click", (e) => {
+            if (e.target === addBtn || popup.contains(e.target)) return;
+            popup.classList.remove("active");
+        });
+
+        roleSelect.addEventListener("change", () => {
+            extraFields.innerHTML = "";
+            if (roleSelect.value === "Bowler") {
+                extraFields.innerHTML = `<select id="bowlerType">
+                                            <option value="Pace">Pace</option>
+                                            <option value="Spin">Spin</option>
+                                         </select>`;
+            } else if (roleSelect.value === "Batsman") {
+                extraFields.innerHTML = `<select id="batOrder">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                         </select>
+                                         <select id="batType">
+                                            <option value="Top Order">Top Order</option>
+                                            <option value="Middle Order">Middle Order</option>
+                                            <option value="Lower Order">Lower Order</option>
+                                         </select>`;
             }
         });
 
-        // ✅ Save Player
         savePlayerBtn.addEventListener("click", () => {
             let playerName = document.getElementById("playerName").value;
             let role = roleSelect.value;
@@ -200,27 +235,8 @@
             }
         });
 
-        // ✅ Render Players
         function renderPlayers() {
-            playersList.innerHTML = "";
-            players.forEach((p, i) => {
-                let div = document.createElement("div");
-                div.classList.add("player-card");
-                div.innerHTML = `
-                    ${p.name} - ${p.role}
-                    <div class="icons">
-                        <svg onclick="deletePlayer(${i})" viewBox="0 0 24 24">
-                            <path d="M9 3h6v2H9V3zM5 6h14l-1 14H6L5 6zm2 2v10h2V8H7z"/>
-                        </svg>
-                    </div>`;
-                playersList.appendChild(div);
-            });
-        }
-
-        // ✅ Delete Player
-        function deletePlayer(i) {
-            players.splice(i, 1);
-            renderPlayers();
+            playersList.innerHTML = players.map((p, i) => `<div class="player-card">${p.name} - ${p.role}</div>`).join("");
         }
     </script>
 
