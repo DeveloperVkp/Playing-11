@@ -5,147 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Playing 11 | Ultra Stylish</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background: #0a0a0a;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            text-shadow: 0px 0px 10px cyan;
-        }
-
-        .players-list {
-            margin-top: 20px;
-            width: 90%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .player-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: 0.3s;
-        }
-
-        .player-card:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.05);
-        }
-
-        .icons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .icons svg {
-            cursor: pointer;
-            width: 20px;
-            height: 20px;
-            fill: cyan;
-            transition: 0.3s;
-        }
-
-        .icons svg:hover {
-            fill: red;
-        }
-
-        .add-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: cyan;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 30px;
-            color: black;
-            cursor: pointer;
-            box-shadow: 0px 0px 15px cyan;
-            transition: 0.3s;
-        }
-
-        .add-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0px 0px 20px cyan;
-        }
-
-        .popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 15px cyan;
-            width: 80%;
-            max-width: 400px;
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .popup.active {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .popup h2 {
-            text-shadow: 0px 0px 10px cyan;
-        }
-
-        .popup input, .popup select {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none;
-            background: #333;
-            color: white;
-            border-radius: 5px;
-        }
-
-        .popup button {
-            width: 90%;
-            padding: 10px;
-            background: cyan;
-            border: none;
-            color: black;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .popup button:hover {
-            background: white;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0a0a0a; color: white; text-align: center; padding: 20px; }
+        h1 { font-size: 2.5rem; text-shadow: 0px 0px 10px cyan; }
+        .players-list { margin-top: 20px; width: 90%; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .player-card { background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        .player-card:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); }
+        .icons { display: flex; gap: 10px; }
+        .icons button { background: none; border: none; color: cyan; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .icons button:hover { color: red; }
+        .add-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: cyan; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; color: black; cursor: pointer; box-shadow: 0px 0px 15px cyan; transition: 0.3s; }
+        .add-btn:hover { transform: scale(1.1); box-shadow: 0px 0px 20px cyan; }
+        .popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: rgba(0, 0, 0, 0.9); padding: 20px; border-radius: 10px; box-shadow: 0px 0px 15px cyan; width: 80%; max-width: 400px; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
+        .popup.active { transform: translate(-50%, -50%) scale(1); }
+        .popup input, .popup select { width: 90%; padding: 10px; margin: 10px 0; border: none; background: #333; color: white; border-radius: 5px; }
+        .popup button { width: 90%; padding: 10px; background: cyan; border: none; color: black; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        .popup button:hover { background: white; }
     </style>
 </head>
 <body>
 
     <h1>Playing 11</h1>
-    <div class="players-list" id="playersList">
-        <!-- Players will appear here -->
-    </div>
+    <div class="players-list" id="playersList"></div>
 
     <div class="add-btn" id="addBtn">+</div>
 
@@ -162,6 +43,18 @@
             <option value="Wicketkeeper">Wicketkeeper</option>
         </select>
 
+        <select id="fieldingPosition">
+            <option value="">Select Fielding Position</option>
+            <option value="Slip">Slip</option>
+            <option value="Gully">Gully</option>
+            <option value="Point">Point</option>
+            <option value="Mid On">Mid On</option>
+            <option value="Mid Off">Mid Off</option>
+            <option value="Long On">Long On</option>
+            <option value="Long Off">Long Off</option>
+            <option value="Deep Square Leg">Deep Square Leg</option>
+        </select>
+
         <div id="extraFields"></div>
 
         <button id="savePlayerBtn">Save</button>
@@ -173,14 +66,16 @@
         const savePlayerBtn = document.getElementById("savePlayerBtn");
         const playersList = document.getElementById("playersList");
         const roleSelect = document.getElementById("role");
+        const fieldingPositionSelect = document.getElementById("fieldingPosition");
         const extraFields = document.getElementById("extraFields");
 
-        let players = [];
+        let players = JSON.parse(localStorage.getItem("players")) || [];
         let editIndex = -1;
 
         function resetPopup() {
             document.getElementById("playerName").value = "";
             document.getElementById("role").value = "";
+            document.getElementById("fieldingPosition").value = "";
             document.getElementById("extraFields").innerHTML = "";
             editIndex = -1;
         }
@@ -215,11 +110,6 @@
                                             <option value="9">9</option>
                                             <option value="10">10</option>
                                             <option value="11">11</option>
-                                         </select>
-                                         <select id="batType">
-                                            <option value="Top Order">Top Order</option>
-                                            <option value="Middle Order">Middle Order</option>
-                                            <option value="Lower Order">Lower Order</option>
                                          </select>`;
             }
         });
@@ -227,17 +117,34 @@
         savePlayerBtn.addEventListener("click", () => {
             let playerName = document.getElementById("playerName").value;
             let role = roleSelect.value;
+            let fieldingPosition = fieldingPositionSelect.value;
 
             if (playerName && role) {
-                players.push({ name: playerName, role });
+                players.push({ name: playerName, role, fieldingPosition });
+                localStorage.setItem("players", JSON.stringify(players));
                 renderPlayers();
                 popup.classList.remove("active");
             }
         });
 
         function renderPlayers() {
-            playersList.innerHTML = players.map((p, i) => `<div class="player-card">${p.name} - ${p.role}</div>`).join("");
+            playersList.innerHTML = players.map((p, i) => `
+                <div class="player-card">
+                    ${p.name} - ${p.role} - ${p.fieldingPosition}
+                    <div class="icons">
+                        <button onclick="editPlayer(${i})">✏️</button>
+                        <button onclick="deletePlayer(${i})">🗑️</button>
+                    </div>
+                </div>`).join("");
         }
+
+        function deletePlayer(index) {
+            players.splice(index, 1);
+            localStorage.setItem("players", JSON.stringify(players));
+            renderPlayers();
+        }
+
+        renderPlayers();
     </script>
 
 </body>
