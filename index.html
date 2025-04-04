@@ -162,8 +162,6 @@
             <option value="Wicketkeeper">Wicketkeeper</option>
         </select>
 
-        <div id="extraFields"></div>
-
         <button id="savePlayerBtn">Save</button>
     </div>
 
@@ -173,82 +171,56 @@
         const savePlayerBtn = document.getElementById("savePlayerBtn");
         const playersList = document.getElementById("playersList");
         const roleSelect = document.getElementById("role");
-        const extraFields = document.getElementById("extraFields");
 
         let players = [];
-        let editIndex = -1;
 
-        // Open popup
+        // ✅ Add Button Click - Open Popup
         addBtn.addEventListener("click", () => {
-            resetPopup();
+            document.getElementById("playerName").value = "";
+            roleSelect.value = "";
             popup.classList.add("active");
         });
 
-        // Close popup when clicking outside
+        // ✅ Close Popup on Background Click
         document.addEventListener("click", (e) => {
             if (!popup.contains(e.target) && e.target !== addBtn) {
                 popup.classList.remove("active");
             }
         });
 
-        // Handle extra fields based on role selection
-        roleSelect.addEventListener("change", () => {
-            extraFields.innerHTML = "";
-            if (roleSelect.value === "Bowler") {
-                extraFields.innerHTML = `<select id="bowlerType">
-                                            <option value="Pace">Pace</option>
-                                            <option value="Spin">Spin</option>
-                                         </select>`;
-            } else if (roleSelect.value === "Batsman") {
-                extraFields.innerHTML = `<select id="batOrder">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                         </select>
-                                         <select id="batType">
-                                            <option value="Top Order">Top Order</option>
-                                            <option value="Middle Order">Middle Order</option>
-                                            <option value="Lower Order">Lower Order</option>
-                                         </select>`;
-            }
-        });
-
-        // Save player
+        // ✅ Save Player
         savePlayerBtn.addEventListener("click", () => {
             let playerName = document.getElementById("playerName").value;
             let role = roleSelect.value;
-            let details = "";
-
-            if (role === "Bowler") {
-                details = document.getElementById("bowlerType")?.value || "";
-            } else if (role === "Batsman") {
-                details = document.getElementById("batOrder")?.value + ", " + document.getElementById("batType")?.value;
-            }
 
             if (playerName && role) {
-                players.push({ name: playerName, role, details });
+                players.push({ name: playerName, role });
                 renderPlayers();
                 popup.classList.remove("active");
             }
         });
 
-        // Render players
+        // ✅ Render Players
         function renderPlayers() {
-            playersList.innerHTML = players.map((p) => `<div class="player-card">${p.name} - ${p.role} (${p.details})</div>`).join("");
+            playersList.innerHTML = "";
+            players.forEach((p, i) => {
+                let div = document.createElement("div");
+                div.classList.add("player-card");
+                div.innerHTML = `
+                    ${p.name} - ${p.role}
+                    <div class="icons">
+                        <svg onclick="deletePlayer(${i})" viewBox="0 0 24 24">
+                            <path d="M9 3h6v2H9V3zM5 6h14l-1 14H6L5 6zm2 2v10h2V8H7z"/>
+                        </svg>
+                    </div>`;
+                playersList.appendChild(div);
+            });
         }
 
-        function resetPopup() {
-            document.getElementById("playerName").value = "";
-            roleSelect.value = "";
-            extraFields.innerHTML = "";
+        // ✅ Delete Player
+        function deletePlayer(i) {
+            players.splice(i, 1);
+            renderPlayers();
         }
     </script>
 
